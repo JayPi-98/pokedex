@@ -1,11 +1,6 @@
 import { createInterface } from "node:readline";
 import { getCommands } from "./command_registry";
-
-const rl = createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  prompt: "Pokedex > "
-});
+import { State } from "./state";
 
 
 export function cleanInput(input: string): string[] {
@@ -17,20 +12,20 @@ export function cleanInput(input: string): string[] {
 
 const commands = getCommands()
 
-export function startREPL() {
-    rl.prompt()
-    rl.on("line",(input) =>{
+export function startREPL(state: State) {
+    state.readline.prompt()
+    state.readline.on("line",(input) =>{
         const inputData = cleanInput(input)
         if (!inputData.length){
-            rl.prompt()
+            state.readline.prompt()
             return 
         }
         const commandName = inputData[0]
-        const selectedCommand = commands[commandName]
+        const selectedCommand = state.commandsRegistry[commandName]
 
         if (selectedCommand){
             try {
-                selectedCommand.callback(commands)
+                selectedCommand.callback(state)
             } catch (error) {
                 console.log(`Error: ${error}`)
             }
@@ -39,6 +34,6 @@ export function startREPL() {
         }
 
 
-        rl.prompt()
+        state.readline.prompt()
     })
 }

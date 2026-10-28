@@ -1,9 +1,11 @@
 
 import { startREPL } from "./repl";
+import { initState } from "./state";
 
 function main() {
 
-    startREPL();
+   const state = initState();
+    startREPL(state);
 
 }
 

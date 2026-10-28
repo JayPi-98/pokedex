@@ -1,4 +1,5 @@
 import { createInterface } from "node:readline";
+import { getCommands } from "./command_registry";
 
 const rl = createInterface({
   input: process.stdin,
@@ -14,9 +15,9 @@ export function cleanInput(input: string): string[] {
     .filter(string => string !== "");
 }
 
+const commands = getCommands()
 
 export function startREPL() {
-    
     rl.prompt()
     rl.on("line",(input) =>{
         const inputData = cleanInput(input)
@@ -24,7 +25,20 @@ export function startREPL() {
             rl.prompt()
             return 
         }
-        console.log(`Your command was: ${inputData[0]}`)
+        const commandName = inputData[0]
+        const selectedCommand = commands[commandName]
+
+        if (selectedCommand){
+            try {
+                selectedCommand.callback(commands)
+            } catch (error) {
+                console.log(`Error: ${error}`)
+            }
+        } else{
+            console.log("Unknown command")
+        }
+
+
         rl.prompt()
     })
 }

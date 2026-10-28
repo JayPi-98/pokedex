@@ -1,6 +1,9 @@
 
 import { cleanInput } from "../repl.js";
 import { describe, expect, test } from "vitest";
+import { getCommands } from "../command_registry.js";
+
+const commands =  getCommands()
 
 describe.each([
   {
@@ -40,3 +43,30 @@ describe.each([
 
   });
 });
+
+
+describe("getCommands", () => {
+  test("returns the expected commands", () => {
+    const commands = getCommands();
+
+    const expected = {
+      exit: {
+        name: "exit",
+        description: "Exit the Pokedex",
+      },
+      help: {
+        name: "help",
+      description: "Displays a help message",
+      },
+    };
+
+    
+    expect(commands.exit.name).toBe(expected.exit.name);
+    expect(commands.exit.description).toBe(expected.exit.description);
+
+    expect(commands.help.name).toBe(expected.help.name);
+    expect(commands.help.description).toBe(expected.help.description);
+  });
+})
+
+

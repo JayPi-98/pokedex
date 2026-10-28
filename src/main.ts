@@ -1,9 +1,10 @@
-import { cleanInput, startREPL } from "./repl";
+
+import { startREPL } from "./repl";
 
 function main() {
 
-  startREPL();
-  
+    startREPL();
+
 }
 
 main();
